@@ -1,0 +1,40 @@
+@model Employee.Models.EmployeeEntity
+
+<h1>Search Employee</h1>
+
+<form asp-controller="Home" asp-action="Search" method="post">
+
+    <table border="1" cellpadding="10">
+        <tr>
+            <td>Employee ID :</td>
+            <td><input asp-for="EmployeeID" /></td>
+        </tr>
+            <td colspan="2">
+                <button type="submit">Search</button>
+            </td>
+        </tr>
+    </table>
+
+<br/ >
+<h1>Search Result</h1>
+
+    <table border="1" cellpadding="10">
+        <tr>
+            <td>Employee ID :</td>
+            <td>@Model.EmployeeID</td>
+        </tr>
+        <tr>
+            <td>First Name :</td>
+            <td>@Model.FirstName</td>
+        </tr>
+        <tr>
+            <td>Last Name :</td>
+            <td>@Model.LastName</td>
+        </tr>
+    </table>
+
+<br/ >
+<h1><font color="@ViewBag.Color">@ViewBag.Message</font></h1>
+<br/ >
+
+</form>
