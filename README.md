@@ -49,10 +49,12 @@ The following code sets 30 seconds as an expiration time while adding records.
 			cache.StringSet(entity.EmployeeID.ToString(), json);
 			cache.KeyExpire(entity.EmployeeID.ToString(), new TimeSpan(0,0,ttl));
 ```
+<br>
 <img src="https://github.com/developer-onizuka/redisCache-MongoDB/blob/main/redisCache-MongoDB1.png" width="520"> <br>
 
 # 5. Search DB for some ids
 First access is a miss hit, but the app retrives the data from MongoDB. So next time, the access will be hit, if the access is within 30 seconds from the first access.
+<br>
 <img src="https://github.com/developer-onizuka/redisCache-MongoDB/blob/main/redisCache-MongoDB2.png" width="640"> <br>
 <br>
 <img src="https://github.com/developer-onizuka/redisCache-MongoDB/blob/main/redisCache-MongoDB3.png" width="505"> <br>
