@@ -32,7 +32,7 @@ PONG
 $ docker run -d --rm -p 27017:27017 --name mongodb mongo:latest
 ```
 
-# 3. Dotnet run
+# 3. Run redisCache aware App
 ```
 $ git clone https://github.com/developer-onizuka/redisCache-MongoDB
 $ cd redisCache-MongoDB
