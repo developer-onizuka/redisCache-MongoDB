@@ -43,8 +43,8 @@ $ dotnet run
 Add some Employees into MongoDB.<br>
 The following code sets 30 seconds as an expiration time while adding records.
 ```
-  		private int ttl = 30;
-      ...
+		private int ttl = 30;
+                    ...
 			string json = JsonConvert.SerializeObject(entity);
 			cache.StringSet(entity.EmployeeID.ToString(), json);
 			cache.KeyExpire(entity.EmployeeID.ToString(), new TimeSpan(0,0,ttl));
