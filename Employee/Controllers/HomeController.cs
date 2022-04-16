@@ -59,6 +59,12 @@ namespace Employee.Controllers
             		}
         	}
 
+		public void WriteCache(EmployeeEntity entity)
+		{
+			string json = JsonConvert.SerializeObject(entity);
+			cache.StringSet(entity.EmployeeID.ToString(), json);
+			cache.KeyExpire(entity.EmployeeID.ToString(), new TimeSpan(0,0,ttl));
+		}
 
 		public IActionResult Index()
 		{
@@ -76,15 +82,12 @@ namespace Employee.Controllers
 		public IActionResult Search(EmployeeEntity emp)
 		{
 			string Jemp = cache.StringGet(emp.EmployeeID.ToString());
-			//Console.WriteLine(collection.CountDocuments(e => e.EmployeeID == emp.EmployeeID));
 			
 			if (string.IsNullOrEmpty(Jemp)) {
 				if (collection.CountDocuments(e => e.EmployeeID == emp.EmployeeID) > 0)
 				{
 					EmployeeEntity empFind = collection.Find(e => e.EmployeeID == emp.EmployeeID).FirstOrDefault();
-					Jemp = JsonConvert.SerializeObject(empFind);
-					cache.StringSet(empFind.EmployeeID.ToString(), Jemp);
-					cache.KeyExpire(empFind.EmployeeID.ToString(), new TimeSpan(0,0,ttl));
+					WriteCache(empFind);
 					Jemp = cache.StringGet(empFind.EmployeeID.ToString());
 					ViewBag.Message = "RedisCache Miss and Data is from MongoDB";
 					ViewBag.Color = "blue";
@@ -114,14 +117,10 @@ namespace Employee.Controllers
 		public IActionResult Insert(EmployeeEntity emp)
 		{
 			collection.InsertOne(emp);
-			//Console.WriteLine("Employee added: " + emp.FirstName + " " +  emp.LastName);
-			//Console.WriteLine(emp.Id);
 
 			TempData["Message"] = "Employee added successfully!";
 
-			string Jemp = JsonConvert.SerializeObject(emp);
-			cache.StringSet(emp.EmployeeID.ToString(), Jemp);
-			cache.KeyExpire(emp.EmployeeID.ToString(), new TimeSpan(0,0,ttl));
+			WriteCache(emp);
 
 			return RedirectToAction("Index");
 		}
@@ -129,7 +128,6 @@ namespace Employee.Controllers
 		[HttpGet]
 		public IActionResult Update(string id)
 		{
-			//ObjectId oId = new ObjectId(id);
 			string oId = id;
 			EmployeeEntity emp = collection.Find(e => e.Id == oId).FirstOrDefault();
 
@@ -139,12 +137,9 @@ namespace Employee.Controllers
 		[HttpPost]
 		public IActionResult Update(string id,EmployeeEntity emp)
 		{
-			//emp.Id = new ObjectId(id);
 			emp.Id = id;
 			Console.WriteLine(emp.Id);
 			var filter = Builders<EmployeeEntity>.Filter.Eq("Id", emp.Id);
-			//var updateDef = Builders<EmployeeEntity>.Update.Set("FirstName", emp.FirstName);
-			//updateDef = updateDef.Set("LastName", emp.LastName);
 			var updateDef = Builders<EmployeeEntity>.Update.Set("FirstName", emp.FirstName)
 								       .Set("LastName", emp.LastName);
 			var result = collection.UpdateOne(filter, updateDef);
@@ -158,16 +153,13 @@ namespace Employee.Controllers
 				TempData["Message"] = "Error while updating Employee!";
 			}
 
-			string Jemp = JsonConvert.SerializeObject(emp);
-			cache.StringSet(emp.EmployeeID.ToString(), Jemp);
-			cache.KeyExpire(emp.EmployeeID.ToString(), new TimeSpan(0,0,ttl));
+			WriteCache(emp);
 
 			return RedirectToAction("Index");
 		}
 
 		public IActionResult ConfirmDelete(string id)
 		{
-			//ObjectId oId = new ObjectId(id);
 			string oId = id;
 			EmployeeEntity emp = collection.Find(e => e.Id == oId).FirstOrDefault();
 			return View(emp);
@@ -176,7 +168,6 @@ namespace Employee.Controllers
 		[HttpPost]
 		public IActionResult Delete(string id)
 		{
-			//ObjectId oId = new ObjectId(id);
 			string oId = id;
 			var result = collection.DeleteOne<EmployeeEntity> (e => e.Id == oId);
 			if (result.IsAcknowledged)
