@@ -41,4 +41,6 @@ Add some Employees into MongoDB.
 # 5. Search DB for some ids
 First access is a miss hit. However, the second access is a cache hit.
 
-
+<img src="https://github.com/developer-onizuka/redisCache-MongoDB/blob/main/redisCache-MongoDB1.png" width="640"> <br>
+<img src="https://github.com/developer-onizuka/redisCache-MongoDB/blob/main/redisCache-MongoDB2.png" width="640"> <br>
+<img src="https://github.com/developer-onizuka/redisCache-MongoDB/blob/main/redisCache-MongoDB3.png" width="640"> <br>
