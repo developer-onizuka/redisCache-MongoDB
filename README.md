@@ -23,7 +23,16 @@ Warning: Using a password with '-a' or '-u' option on the command line interface
 PONG
 ```
 
-# 2. 
+# 2. Run MongoDB
+```
+$ docker run -d --rm -p 27017:27017 --name mongodb mongo:latest
+```
 
+# 3. Dotnet run
+```
+$ git clone https://github.com/developer-onizuka/redisCache-MongoDB
+$ cd redisCache-MongoDB
+$ dotnet run
+```
 
 
