@@ -37,10 +37,10 @@ $ dotnet run
 
 # 4. Access tp https://localhost:5001/Home
 Add some Employees into MongoDB.
+<img src="https://github.com/developer-onizuka/redisCache-MongoDB/blob/main/redisCache-MongoDB1.png" width="640"> <br>
 
 # 5. Search DB for some ids
 First access is a miss hit. However, the second access is a cache hit.
-
-<img src="https://github.com/developer-onizuka/redisCache-MongoDB/blob/main/redisCache-MongoDB1.png" width="640"> <br>
 <img src="https://github.com/developer-onizuka/redisCache-MongoDB/blob/main/redisCache-MongoDB2.png" width="640"> <br>
+<br>
 <img src="https://github.com/developer-onizuka/redisCache-MongoDB/blob/main/redisCache-MongoDB3.png" width="640"> <br>
