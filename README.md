@@ -35,4 +35,10 @@ $ cd redisCache-MongoDB
 $ dotnet run
 ```
 
+# 4. Access tp https://localhost:5001/Home
+Add some Employees into MongoDB.
+
+# 5. Search DB for some ids
+First access is a miss hit. However, the second access is a cache hit.
+
 
