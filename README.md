@@ -1,13 +1,17 @@
 # redisCache-MongoDB
 
-You can choose any of the two Redis™ Helm charts for deploying a Redis™ cluster.
+Create a system using redisCache as a search engine of MongoDB's records.
+
+
+Before doing it, You can choose any of the two Redis™ Helm charts for deploying a Redis™ cluster.
 
 Redis™ Helm Chart will deploy a master-slave cluster, with the option of enabling using Redis™ Sentinel.<br>
 Redis™ Cluster Helm Chart will deploy a Redis™ Cluster topology with sharding.
 
+My choise is Redis itself not Redis cluster.
 
 
-# 0. Install Redis (not Redis Cluster)
+# 0. Install Redis
 > https://github.com/developer-onizuka/redisCache#2-deploying-redis-on-kubernetes-with-helm
 
 
