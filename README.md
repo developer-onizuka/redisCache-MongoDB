@@ -39,7 +39,7 @@ $ cd redisCache-MongoDB
 $ dotnet run
 ```
 
-# 4. Access tp localhost:5001/Home
+# 4. Access to localhost:5001/Home
 Add some Employees into MongoDB.<br>
 The following code sets 30 seconds as an expiration time while adding records.
 ```
