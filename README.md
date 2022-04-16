@@ -41,10 +41,18 @@ $ dotnet run
 
 # 4. Access tp https://localhost:5001/Home
 Add some Employees into MongoDB.<br>
-<img src="https://github.com/developer-onizuka/redisCache-MongoDB/blob/main/redisCache-MongoDB1.png" width="640"> <br>
+The following code sets 30 seconds as an expiration time while adding records.
+```
+  		private int ttl = 30;
+      ...
+			string json = JsonConvert.SerializeObject(entity);
+			cache.StringSet(entity.EmployeeID.ToString(), json);
+			cache.KeyExpire(entity.EmployeeID.ToString(), new TimeSpan(0,0,ttl));
+```
+<img src="https://github.com/developer-onizuka/redisCache-MongoDB/blob/main/redisCache-MongoDB1.png" width="520"> <br>
 
 # 5. Search DB for some ids
-First access is a miss hit. However, the second access is a cache hit.
+First access is a miss hit, but the app retrives the data from MongoDB. So next time, the access will be hit, if the access is within 30 seconds from the first access.
 <img src="https://github.com/developer-onizuka/redisCache-MongoDB/blob/main/redisCache-MongoDB2.png" width="640"> <br>
 <br>
 <img src="https://github.com/developer-onizuka/redisCache-MongoDB/blob/main/redisCache-MongoDB3.png" width="505"> <br>
