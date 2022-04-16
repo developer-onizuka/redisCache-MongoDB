@@ -2,7 +2,7 @@
 
 You can choose any of the two Redis™ Helm charts for deploying a Redis™ cluster.
 
-Redis™ Helm Chart will deploy a master-slave cluster, with the option of enabling using Redis™ Sentinel.
+Redis™ Helm Chart will deploy a master-slave cluster, with the option of enabling using Redis™ Sentinel.<br>
 Redis™ Cluster Helm Chart will deploy a Redis™ Cluster topology with sharding.
 
 
