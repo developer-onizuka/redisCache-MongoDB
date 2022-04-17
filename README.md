@@ -18,7 +18,8 @@ My choise is Redis itself not Redis cluster.
 # 1. Set Environment of Redis Server and password
 ```
 export REDIS="192.168.33.223:6379"
-export PASSWD=$(kubectl get secret --namespace default redis -o jsonpath="{.data.redis-password}" | base64 --decode)
+export REDIS_PASSWD=$(kubectl get secret --namespace default redis -o jsonpath="{.data.redis-password}" | base64 --decode)
+export REDIS_TTL="30"
 ```
 ```
 $ kubectl exec -it redis-master-0 -- redis-cli -a $PASSWD
@@ -68,5 +69,5 @@ The following code sets 30 seconds as an expiration time while adding records.
 $ docker build . --file Dockerfile --tag employee2:2.0.0
 ```
 ```
-$ docker run --rm -it -p 5001:5001 -p 5000:5000 --env MONGO="172.17.0.2:27017" --env REDIS="192.168.33.223:6379" --env PASSWD="XXXXXXXXXX" --name employee employee2:2.0.0
+$ docker run --rm -it -p 5001:5001 -p 5000:5000 --env MONGO="172.17.0.2:27017" --env REDIS="192.168.33.223:6379" --env REDIS_PASSWD="XXXXXXXXXX" --env REDIS_TTL="10" --name employee employee2:2.0.0
 ```
