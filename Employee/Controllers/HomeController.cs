@@ -19,9 +19,10 @@ namespace Employee.Controllers
     	{
 		private readonly ILogger<HomeController> _logger;
     		private IMongoCollection<EmployeeEntity> collection;
-		IDatabase cache = Connection.GetDatabase();
-		private int ttl = 30;
 		private EmployeeEntity key = new EmployeeEntity() {};
+
+		IDatabase cache = Connection.GetDatabase();
+		private int redisTTL = 30;
 
         	public HomeController(ILogger<HomeController> logger)
    		{
@@ -36,6 +37,20 @@ namespace Employee.Controllers
 			IMongoDatabase db = client.GetDatabase("mydb");
 			collection = db.GetCollection<EmployeeEntity>("Employee");
 
+			var envTTL = Environment.GetEnvironmentVariable("REDIS_TTL");
+			if (!string.IsNullOrEmpty(envTTL))
+			{
+				try 
+				{
+					redisTTL = Convert.ToInt32(envTTL);
+				}
+				catch (FormatException exception)
+				{
+					redisTTL = 30;
+					Console.WriteLine("Exceptional Error: {0} Set as default value.", exception.Message);
+				}
+			}
+
             		_logger = logger;
     		}
 
@@ -46,8 +61,9 @@ namespace Employee.Controllers
 		       	{
 				ipaddr = "127.0.0.1:6379";
 			}
-			var passwd = Environment.GetEnvironmentVariable("PASSWD");
+			var passwd = Environment.GetEnvironmentVariable("REDIS_PASSWD");
 			string connectionString = ipaddr + ",password=" + passwd;
+
 			return ConnectionMultiplexer.Connect(connectionString);
         	});
 
@@ -63,7 +79,7 @@ namespace Employee.Controllers
 		{
 			string json = JsonConvert.SerializeObject(entity);
 			cache.StringSet(entity.EmployeeID.ToString(), json);
-			cache.KeyExpire(entity.EmployeeID.ToString(), new TimeSpan(0,0,ttl));
+			cache.KeyExpire(entity.EmployeeID.ToString(), new TimeSpan(0,0,redisTTL));
 		}
 
 		public IActionResult Index()
