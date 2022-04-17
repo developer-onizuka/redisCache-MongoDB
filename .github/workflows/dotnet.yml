@@ -1,0 +1,31 @@
+name: .NET
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: cd Employee; dotnet restore
+    - name: Build
+      #run: cd Employee; dotnet add package MongoDB.Driver; dotnet build --no-restore
+      #run: cd Employee; dotnet add package MongoDB.Driver; dotnet dev-certs https -v; dotnet dev-certs https --trust; dotnet publish -c release -r linux-x64 --self-contained
+      run: cd Employee; dotnet publish -c release -r linux-x64 --self-contained
+    - name: Test
+      run: cd Employee; dotnet test --no-build --verbosity normal
+    - uses: actions/upload-artifact@v1
+      with:
+        name: employee_${{ github.sha }}_amd64
+        path: .
