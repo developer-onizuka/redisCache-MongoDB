@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag employee2:latest;
+      run: docker build . --file Dockerfile --tag employee2:latest; docker save employee2:latest > employee2.tar
     - name: Create New tag
       run: docker tag employee2:latest ${{ secrets.dockerhub_id }}/employee2:beta
     - name: Push image to the DockerHub
