@@ -1,0 +1,26 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag employee2:latest;
+    - name: Create New tag
+      run: docker tag employee2:latest ${{ secrets.dockerhub_id }}/employee2:beta
+    - name: Push image to the DockerHub
+      run: docker login -p ${{ secrets.dockerhub_secret }} -u ${{ secrets.dockerhub_id }}; docker image push ${{ secrets.dockerhub_id }}/employee2:beta
+    - uses: actions/upload-artifact@v1
+      with:
+        name: employee_${{ github.sha }}_amd64
+        path: .
