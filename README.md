@@ -61,3 +61,9 @@ The following code sets 30 seconds as an expiration time while adding records.
 - So next time, the access will be hit, if the access is within 30 seconds from the first access.
 <br>
 <img src="https://github.com/developer-onizuka/redisCache-MongoDB/blob/main/redisCache-MongoDB3.png" width="505"> <br>
+
+
+# 6. Build Container
+```
+$ docker build . --file Dockerfile --tag employee2:2.0.0
+```
