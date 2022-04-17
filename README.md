@@ -22,7 +22,7 @@ export REDIS_PASSWD=$(kubectl get secret --namespace default redis -o jsonpath="
 export REDIS_TTL="30"
 ```
 ```
-$ kubectl exec -it redis-master-0 -- redis-cli -a $PASSWD
+$ kubectl exec -it redis-master-0 -- redis-cli -a $REDIS_PASSWD
 Warning: Using a password with '-a' or '-u' option on the command line interface may not be safe.
 127.0.0.1:6379> ping
 PONG
