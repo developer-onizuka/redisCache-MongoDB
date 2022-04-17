@@ -77,3 +77,5 @@ $ docker run --rm -it -p 5001:5001 -p 5000:5000 --env MONGO="172.17.0.2:27017" -
 # 7. Push it to dockerhub
 See https://github.com/developer-onizuka/docker_push .
 
+# 8. Yaml file for Kubernetes
+> https://github.com/developer-onizuka/hybridCloud/blob/main/onprem-L7/employee2-onprem-mongodb.yaml
