@@ -22,6 +22,7 @@ namespace Employee.Controllers
 		private EmployeeEntity key = new EmployeeEntity() {};
 
 		IDatabase cache = Connection.GetDatabase();
+		private int cacheLine = 5;
 		private int redisTTL = 30;
 
         	public HomeController(ILogger<HomeController> logger)
@@ -37,6 +38,19 @@ namespace Employee.Controllers
 			IMongoDatabase db = client.GetDatabase("mydb");
 			collection = db.GetCollection<EmployeeEntity>("Employee");
 
+			var envCacheLine = Environment.GetEnvironmentVariable("REDIS_CACHELINE");
+			if (!string.IsNullOrEmpty(envCacheLine))
+		       	{
+				try
+				{
+					cacheLine = Convert.ToInt32(envCacheLine);
+				}
+				catch (FormatException exception)
+				{
+					cacheLine = 5;
+					Console.WriteLine("Exceptional Error: {0} Set as default value.", exception.Message);
+				}
+			}	
 			var envTTL = Environment.GetEnvironmentVariable("REDIS_TTL");
 			if (!string.IsNullOrEmpty(envTTL))
 			{
@@ -82,6 +96,32 @@ namespace Employee.Controllers
 			cache.KeyExpire(entity.EmployeeID.ToString(), new TimeSpan(0,0,redisTTL));
 		}
 
+		public void BurstWriteCacheSync(EmployeeEntity entity, int Num)
+		{
+			int Size = (int)collection.CountDocuments(x=>true);
+			for (int i=entity.EmployeeID; (i < entity.EmployeeID+Num) && (i <= Size); i++)
+			{
+				EmployeeEntity burstEntity = collection.Find(x => x.EmployeeID == i).FirstOrDefault();
+				string json = JsonConvert.SerializeObject(burstEntity);
+				cache.StringSet(burstEntity.EmployeeID.ToString(), json);
+				cache.KeyExpire(burstEntity.EmployeeID.ToString(), new TimeSpan(0,0,redisTTL));
+			}
+		}
+
+		public void BurstWriteCacheAsync(EmployeeEntity entity, int Num)
+		{
+			int Size = (int)collection.CountDocuments(x=>true);
+			var transaction = cache.CreateTransaction();
+			for (int i=entity.EmployeeID; (i < entity.EmployeeID+Num) && (i <= Size); i++)
+			{
+				EmployeeEntity burstEntity = collection.Find(x => x.EmployeeID == i).FirstOrDefault();
+				string json = JsonConvert.SerializeObject(burstEntity);
+				transaction.StringSetAsync(burstEntity.EmployeeID.ToString(), json);
+				transaction.KeyExpireAsync(burstEntity.EmployeeID.ToString(), new TimeSpan(0,0,redisTTL));
+			}
+			transaction.ExecuteAsync();
+		}
+
 		public IActionResult Index()
 		{
 			var model = collection.Find(a=>true).ToList();
@@ -103,7 +143,9 @@ namespace Employee.Controllers
 				if (collection.CountDocuments(e => e.EmployeeID == emp.EmployeeID) > 0)
 				{
 					EmployeeEntity empFind = collection.Find(e => e.EmployeeID == emp.EmployeeID).FirstOrDefault();
-					WriteCache(empFind);
+					//WriteCache(empFind);
+					//BurstWriteCacheSync(empFind,cacheLine);
+					BurstWriteCacheAsync(empFind,cacheLine);
 					Jemp = cache.StringGet(empFind.EmployeeID.ToString());
 					ViewBag.Message = "RedisCache Miss and Data is from MongoDB";
 					ViewBag.Color = "blue";
@@ -136,7 +178,9 @@ namespace Employee.Controllers
 
 			TempData["Message"] = "Employee added successfully!";
 
-			WriteCache(emp);
+			//WriteCache(emp);
+			//BurstWriteCacheSync(emp,cacheLine);
+			BurstWriteCacheAsync(emp,cacheLine);
 
 			return RedirectToAction("Index");
 		}
@@ -154,7 +198,7 @@ namespace Employee.Controllers
 		public IActionResult Update(string id,EmployeeEntity emp)
 		{
 			emp.Id = id;
-			Console.WriteLine(emp.Id);
+			//Console.WriteLine(emp.Id);
 			var filter = Builders<EmployeeEntity>.Filter.Eq("Id", emp.Id);
 			var updateDef = Builders<EmployeeEntity>.Update.Set("FirstName", emp.FirstName)
 								       .Set("LastName", emp.LastName);
@@ -169,7 +213,9 @@ namespace Employee.Controllers
 				TempData["Message"] = "Error while updating Employee!";
 			}
 
-			WriteCache(emp);
+			//WriteCache(emp);
+			//BurstWriteCacheSync(emp,cacheLine);
+			BurstWriteCacheAsync(emp,cacheLine);
 
 			return RedirectToAction("Index");
 		}
