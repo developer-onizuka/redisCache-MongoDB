@@ -33,12 +33,15 @@ PONG
 # 2. Run MongoDB
 ```
 $ docker run -d --rm -p 27017:27017 --name mongodb mongo:latest
+$ curl 172.17.0.2:27017
+It looks like you are trying to access MongoDB over HTTP on the native driver port.
 ```
 
 # 3. Run redisCache aware App
 ```
 $ git clone https://github.com/developer-onizuka/redisCache-MongoDB
 $ cd redisCache-MongoDB
+$ export MONGO="172.17.0.2:27017"
 $ dotnet run
 ```
 
