@@ -110,14 +110,14 @@ namespace Employee.Controllers
 
 		public void BurstWriteCacheAsync(EmployeeEntity entity, int Num)
 		{
-			int Size = (int)collection.CountDocuments(x=>true);
 			var transaction = cache.CreateTransaction();
-			for (int i=entity.EmployeeID; (i < entity.EmployeeID+Num) && (i <= Size); i++)
+			var burstList = collection.Find(x => x.EmployeeID >= entity.EmployeeID 
+					                  && x.EmployeeID < entity.EmployeeID+Num).ToList();
+			foreach (EmployeeEntity item in burstList)
 			{
-				EmployeeEntity burstEntity = collection.Find(x => x.EmployeeID == i).FirstOrDefault();
-				string json = JsonConvert.SerializeObject(burstEntity);
-				transaction.StringSetAsync(burstEntity.EmployeeID.ToString(), json);
-				transaction.KeyExpireAsync(burstEntity.EmployeeID.ToString(), new TimeSpan(0,0,redisTTL));
+				string json = JsonConvert.SerializeObject(item);
+				transaction.StringSetAsync(item.EmployeeID.ToString(), json);
+				transaction.KeyExpireAsync(item.EmployeeID.ToString(), new TimeSpan(0,0,redisTTL));
 			}
 			transaction.ExecuteAsync();
 		}
@@ -152,7 +152,7 @@ namespace Employee.Controllers
 				}
 				else
 			       	{
-					Jemp = "{\"Id\":\"null\",\"EmployeeID\":" + emp.EmployeeID + ",\"FirstName\":\"null\",\"LastName\":\"null\"}";
+					Jemp = "{\"Id\":\"null\",\"EmployeeID\":" + emp.EmployeeID + " ,\"FirstName\":\"null\",\"LastName\":\"null\"}";
 				}
 			}
 			else
