@@ -152,7 +152,7 @@ namespace Employee.Controllers
 				}
 				else
 			       	{
-					Jemp = "{\"Id\":\"null\",\"EmployeeID\":" + emp.EmployeeID + " ,\"FirstName\":\"null\",\"LastName\":\"null\"}";
+					Jemp = "{\"Id\":\"\",\"EmployeeID\":" + emp.EmployeeID + " ,\"FirstName\":\"null\",\"LastName\":\"null\"}";
 				}
 			}
 			else

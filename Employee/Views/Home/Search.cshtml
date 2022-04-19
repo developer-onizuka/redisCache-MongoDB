@@ -31,6 +31,14 @@
             <td>Last Name :</td>
             <td>@Model.LastName</td>
         </tr>
+        <tr>
+             @if (!string.IsNullOrEmpty(@Model.Id))
+             {
+                  <td> <a asp-controller="Home" asp-action="Update" asp-route-id="@Model.Id">Edit</a> </td>
+                  <td> <a asp-controller="Home" asp-action="ConfirmDelete" asp-route-id="@Model.Id">Delete</a> </td>
+             }
+        </tr>
+
     </table>
 
 <br/ >
