@@ -124,7 +124,7 @@ namespace Employee.Controllers
 
 		public IActionResult Index()
 		{
-			var model = collection.Find(a=>true).ToList();
+			var model = collection.Find(a=>true).SortBy(a=>a.EmployeeID).Limit(20).ToList();
 			return View(model);
 		}
 
@@ -152,7 +152,7 @@ namespace Employee.Controllers
 				}
 				else
 			       	{
-					Jemp = "{\"Id\":\"\",\"EmployeeID\":" + emp.EmployeeID + " ,\"FirstName\":\"null\",\"LastName\":\"null\"}";
+					Jemp = "{\"Id\":\"\",\"EmployeeID\":" + emp.EmployeeID + " ,\"FirstName\":\"\",\"LastName\":\"\"}";
 				}
 			}
 			else
