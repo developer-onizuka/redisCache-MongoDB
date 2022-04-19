@@ -1,14 +1,8 @@
 ﻿@model List<Employee.Models.EmployeeEntity>
 
 <h1>List of Employees</h1>
-
-<a asp-controller="Home" asp-action="Insert"> Add New Employee</a>
 <br />
-
-<a asp-controller="Home" asp-action="Search"> Search Employee by EmployeeID</a>
-<br /><br />
-
-<h1>First 20 Entries Sorted by EmployeeID</h1>
+<h2>First 20 Entries Sorted by EmployeeID</h2>
 
 <table border="1" cellpadding="10">
     @foreach(var item in Model)
