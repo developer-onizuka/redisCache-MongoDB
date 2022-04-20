@@ -1,6 +1,6 @@
 # redisCache-MongoDB
-[![.NET](https://github.com/developer-onizuka/redisCache-MongoDB/workflows/.NET/badge.svg)](https://github.com/developer-onizuka/redisCache-MongoDB/actions/workflows/dotnet.yml)
-[![Docker Image CI](https://github.com/developer-onizuka/redisCache-MongoDB/workflows/Docker%20Image%20CI/badge.svg)](https://github.com/developer-onizuka/redisCache-MongoDB/actions/workflows/docker-image.yml)
+[![Docker Image CI](https://github.com/developer-onizuka/redisCache-MongoDB/actions/workflows/docker-image.yml/badge.svg)](https://github.com/developer-onizuka/redisCache-MongoDB/actions/workflows/docker-image.yml)
+[![.NET](https://github.com/developer-onizuka/redisCache-MongoDB/actions/workflows/dotnet.yml/badge.svg)](https://github.com/developer-onizuka/redisCache-MongoDB/actions/workflows/dotnet.yml)
 
 Create a system using redisCache as a search engine of MongoDB's records.
 
