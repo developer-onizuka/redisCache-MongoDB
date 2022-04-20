@@ -199,10 +199,8 @@ namespace Employee.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Update(string id,EmployeeEntity emp)
+		public IActionResult Update(EmployeeEntity emp)
 		{
-			//emp.Id = id;
-			//Console.WriteLine(emp.Id);
 			var filter = Builders<EmployeeEntity>.Filter.Eq("Id", emp.Id);
 			var updateDef = Builders<EmployeeEntity>.Update.Set("FirstName", emp.FirstName)
 								       .Set("LastName", emp.LastName);
@@ -231,11 +229,10 @@ namespace Employee.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Delete(string id,EmployeeEntity emp)
+		public IActionResult Delete(EmployeeEntity emp)
 		{
 			RemoveCache(emp);
-
-			var result = collection.DeleteOne<EmployeeEntity> (e => e.Id == id);
+			var result = collection.DeleteOne<EmployeeEntity> (e => e.Id == emp.Id);
 			if (result.IsAcknowledged)
 			{
 				TempData["Message"] = "Employee deleted successfully!";
