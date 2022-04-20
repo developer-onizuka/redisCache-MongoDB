@@ -129,6 +129,8 @@ namespace Employee.Controllers
 
 		public IActionResult Index()
 		{
+			int Size = (int)collection.CountDocuments(x=>true);
+			ViewBag.Size = Size.ToString();
 			var model = collection.Find(a=>true).SortBy(a=>a.EmployeeID).Limit(20).ToList();
 			return View(model);
 		}
