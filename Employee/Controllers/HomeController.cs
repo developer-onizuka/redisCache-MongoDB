@@ -193,8 +193,7 @@ namespace Employee.Controllers
 		[HttpGet]
 		public IActionResult Update(string id)
 		{
-			string oId = id;
-			EmployeeEntity emp = collection.Find(e => e.Id == oId).FirstOrDefault();
+			EmployeeEntity emp = collection.Find(e => e.Id == id).FirstOrDefault();
 
 			return View(emp);
 		}
@@ -202,7 +201,7 @@ namespace Employee.Controllers
 		[HttpPost]
 		public IActionResult Update(string id,EmployeeEntity emp)
 		{
-			emp.Id = id;
+			//emp.Id = id;
 			//Console.WriteLine(emp.Id);
 			var filter = Builders<EmployeeEntity>.Filter.Eq("Id", emp.Id);
 			var updateDef = Builders<EmployeeEntity>.Update.Set("FirstName", emp.FirstName)
@@ -248,7 +247,6 @@ namespace Employee.Controllers
 
 			return RedirectToAction("Index");
 		}
-
 
 		public IActionResult Privacy()
 		{
