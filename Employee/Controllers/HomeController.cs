@@ -122,6 +122,11 @@ namespace Employee.Controllers
 			transaction.ExecuteAsync();
 		}
 
+		public void RemoveCache(EmployeeEntity entity)
+		{
+			cache.KeyDelete(entity.EmployeeID.ToString());
+		}
+
 		public IActionResult Index()
 		{
 			var model = collection.Find(a=>true).SortBy(a=>a.EmployeeID).Limit(20).ToList();
@@ -222,16 +227,16 @@ namespace Employee.Controllers
 
 		public IActionResult ConfirmDelete(string id)
 		{
-			string oId = id;
-			EmployeeEntity emp = collection.Find(e => e.Id == oId).FirstOrDefault();
+			EmployeeEntity emp = collection.Find(e => e.Id == id).FirstOrDefault();
 			return View(emp);
 		}
 
 		[HttpPost]
-		public IActionResult Delete(string id)
+		public IActionResult Delete(string id,EmployeeEntity emp)
 		{
-			string oId = id;
-			var result = collection.DeleteOne<EmployeeEntity> (e => e.Id == oId);
+			RemoveCache(emp);
+
+			var result = collection.DeleteOne<EmployeeEntity> (e => e.Id == id);
 			if (result.IsAcknowledged)
 			{
 				TempData["Message"] = "Employee deleted successfully!";
