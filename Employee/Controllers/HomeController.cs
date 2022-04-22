@@ -146,6 +146,9 @@ namespace Employee.Controllers
 		{
 			string Jemp = cache.StringGet(emp.EmployeeID.ToString());
 			
+			var sw = new System.Diagnostics.Stopwatch();
+			sw.Start();
+
 			if (string.IsNullOrEmpty(Jemp)) {
 				if (collection.CountDocuments(e => e.EmployeeID == emp.EmployeeID) > 0)
 				{
@@ -169,6 +172,10 @@ namespace Employee.Controllers
 			}
 
 			key = JsonConvert.DeserializeObject<EmployeeEntity>(Jemp);
+
+			sw.Stop();
+			ViewBag.Time = sw.ElapsedMilliseconds.ToString();
+
 			return View(key);
 		}
 
