@@ -144,10 +144,10 @@ namespace Employee.Controllers
 		[HttpPost]
 		public IActionResult Search(EmployeeEntity emp)
 		{
-			string Jemp = cache.StringGet(emp.EmployeeID.ToString());
-			
 			var sw = new System.Diagnostics.Stopwatch();
 			sw.Start();
+
+			string Jemp = cache.StringGet(emp.EmployeeID.ToString());
 
 			if (string.IsNullOrEmpty(Jemp)) {
 				if (collection.CountDocuments(e => e.EmployeeID == emp.EmployeeID) > 0)
