@@ -17,9 +17,6 @@
 
 <br/ >
 <h1>Search Result</h1>
-    @{
-        string base64String = Convert.ToBase64String(Model.Image);
-    }
 
     <table border="1" cellpadding="10">
         <tr>
@@ -34,12 +31,28 @@
             <td>@Model.EmployeeID</td>
             <td>@Model.FirstName</td>
             <td>@Model.LastName</td>
-            <td> <img src="data:image/jpeg;base64, @base64String" alt="" style="width: 120px; height: 180px;"> </td>
-             @if (!string.IsNullOrEmpty(@Model.Id))
-             {
-                  <td> <a asp-controller="Home" asp-action="Update" asp-route-id="@Model.Id">Edit</a> </td>
-                  <td> <a asp-controller="Home" asp-action="ConfirmDelete" asp-route-id="@Model.Id">Delete</a> </td>
-             }
+
+            @if(Model.Image != null)
+            {
+                string base64String = Convert.ToBase64String(Model.Image);
+        	var imgsrc = string.Format("data:image/jpeg;base64,{0}", base64String);
+                <td> <img src="@imgsrc" alt="" style="width: 120px; height: 180px;"> </td>
+            }
+            else
+            {
+                <td> <img src="" alt="" style="width: 120px; height: 180px;"> </td>
+            }
+
+            @if (!string.IsNullOrEmpty(@Model.Id))
+            {
+                 <td> <a asp-controller="Home" asp-action="Update" asp-route-id="@Model.Id">Edit</a> </td>
+                 <td> <a asp-controller="Home" asp-action="ConfirmDelete" asp-route-id="@Model.Id">Delete</a> </td>
+            }
+            else
+            {
+                 <td>Edit</td>
+                 <td>Delete</td>
+            }
         </tr>
 
     </table>
