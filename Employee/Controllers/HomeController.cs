@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.IO;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Employee.Models;
@@ -20,13 +23,14 @@ namespace Employee.Controllers
 		private readonly ILogger<HomeController> _logger;
     		private IMongoCollection<EmployeeEntity> collection;
 		private EmployeeEntity key = new EmployeeEntity() {};
-
+		private readonly IWebHostEnvironment hostingEnvironment;
 		IDatabase cache = Connection.GetDatabase();
 		private int cacheLine = 5;
 		private int redisTTL = 30;
 
-        	public HomeController(ILogger<HomeController> logger)
+        	public HomeController(ILogger<HomeController> logger, IWebHostEnvironment environment)
    		{
+			hostingEnvironment = environment;
 			var ipaddr = Environment.GetEnvironmentVariable("MONGO");
 			if (string.IsNullOrEmpty(ipaddr))
 		       	{
@@ -127,6 +131,24 @@ namespace Employee.Controllers
 			cache.KeyDelete(entity.EmployeeID.ToString());
 		}
 
+		public void UploadFile(IFormFile postedFile, EmployeeEntity emp)
+		{
+		        if(postedFile != null)
+                        {
+                                string fileName = Path.GetFileName(postedFile.FileName);
+                                var uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
+                                var filePath = Path.Combine(uploads, fileName);
+                                postedFile.CopyTo(new FileStream(filePath, FileMode.Create));
+
+                                using (FileStream fs = System.IO.File.OpenRead(filePath))
+                                {
+                                        byte[] bs = new byte[fs.Length];
+                                        fs.Read(bs, 0, bs.Length);
+                                        emp.Image = bs;
+                                }
+                        }
+		}
+
 		public IActionResult Index()
 		{
 			int Size = (int)collection.CountDocuments(x=>true);
@@ -186,8 +208,9 @@ namespace Employee.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Insert(EmployeeEntity emp)
+		public IActionResult Insert(IFormFile postedFile, EmployeeEntity emp)
 		{
+			UploadFile(postedFile, emp);
 			collection.InsertOne(emp);
 
 			TempData["Message"] = "Employee added successfully!";
@@ -208,11 +231,14 @@ namespace Employee.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Update(EmployeeEntity emp)
+		public IActionResult Update(IFormFile postedFile, EmployeeEntity emp)
 		{
+			UploadFile(postedFile, emp);
+
 			var filter = Builders<EmployeeEntity>.Filter.Eq("Id", emp.Id);
 			var updateDef = Builders<EmployeeEntity>.Update.Set("FirstName", emp.FirstName)
-								       .Set("LastName", emp.LastName);
+								       .Set("LastName", emp.LastName)
+								       .Set("Image", emp.Image);
 			var result = collection.UpdateOne(filter, updateDef);
 
 			if (result.IsAcknowledged)

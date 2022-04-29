@@ -1123,11 +1123,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/vagrant/redisCache-MongoDB/Employee/Employee.csproj",
+      "projectUniqueName": "/home/vagrant/tests/redisCache-MongoDB/Employee/Employee.csproj",
       "projectName": "Employee",
-      "projectPath": "/home/vagrant/redisCache-MongoDB/Employee/Employee.csproj",
+      "projectPath": "/home/vagrant/tests/redisCache-MongoDB/Employee/Employee.csproj",
       "packagesPath": "/root/.nuget/packages/",
-      "outputPath": "/home/vagrant/redisCache-MongoDB/Employee/obj/",
+      "outputPath": "/home/vagrant/tests/redisCache-MongoDB/Employee/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/root/.nuget/NuGet/NuGet.Config"

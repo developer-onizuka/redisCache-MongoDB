@@ -2,25 +2,39 @@
 
 <h1>Update Employee</h1>
 
-<form asp-controller="Home" asp-action="Update" method="post">
+<form asp-controller="Home" asp-action="Update" method="post" enctype="multipart/form-data">
 
     <input type="hidden" name="Id" value="@Model.Id" />
 
     <table border="1" cellpadding="10">
         <tr>
             <td>Employee ID :</td>
-            <td><input asp-for="EmployeeID" readonly="readonly" /></td>
+            <td colspan="2"><input asp-for="EmployeeID" readonly="readonly" /></td>
         </tr>
         <tr>
             <td>First Name :</td>
-            <td><input asp-for="FirstName" /></td>
+            <td colspan="2"><input asp-for="FirstName" /></td>
         </tr>
         <tr>
             <td>Last Name :</td>
-            <td><input asp-for="LastName" /></td>
+            <td colspan="2"><input asp-for="LastName" /></td>
         </tr>
         <tr>
-            <td colspan="2">
+            <td>Photo:</td>
+            @if(Model.Image != null)
+            {
+                string base64String = Convert.ToBase64String(Model.Image);
+                var imgsrc = string.Format("data:image/jpeg;base64,{0}", base64String);
+                <td><img src="@imgsrc" alt="" style="width: 120px; height: 180px;"></td>
+            }
+            else
+            {
+                <td><img src="" alt="" style="width: 120px; height: 180px;"></td>
+            }
+            <td><input type="file" name="postedFile" /></td>
+        </tr>
+        <tr>
+            <td colspan="3">
                 <button type="submit">Save</button>
             </td>
         </tr>
@@ -29,3 +43,4 @@
 
 <br/ >
 <h1>@ViewBag.Message</h1>
+

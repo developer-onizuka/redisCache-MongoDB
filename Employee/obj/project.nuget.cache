@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "mfhBiaouSHdOmPvRUVLi7M6SMi/Myw5ZVuSAe/e/+PaaO1BKL59BiUlzEFqi5wYAtTImbHPWixazvKsTd8zJ+A==",
+  "dgSpecHash": "KdlSGTuZpNkQ+5E/0p8T8JCl+yEC6bsapZ9vX4g7veC40ldv3habrncwm+RXJip7k8PDX3gUqicXyhI+nS9bjA==",
   "success": true,
-  "projectFilePath": "/home/vagrant/redisCache-MongoDB/Employee/Employee.csproj",
+  "projectFilePath": "/home/vagrant/tests/redisCache-MongoDB/Employee/Employee.csproj",
   "expectedPackageFiles": [
     "/root/.nuget/packages/dnsclient/1.6.0/dnsclient.1.6.0.nupkg.sha512",
     "/root/.nuget/packages/microsoft.netcore.platforms/5.0.0/microsoft.netcore.platforms.5.0.0.nupkg.sha512",
