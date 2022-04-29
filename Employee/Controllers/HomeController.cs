@@ -136,7 +136,8 @@ namespace Employee.Controllers
 		        if(postedFile != null)
                         {
                                 string fileName = Path.GetFileName(postedFile.FileName);
-                                string uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
+                                //string uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
+                                string uploads = Path.Combine(hostingEnvironment.ContentRootPath, "wwwroot/uploads");
                                 string filePath = Path.Combine(uploads, fileName);
 			        if (!Directory.Exists(uploads))
 				{
