@@ -136,10 +136,15 @@ namespace Employee.Controllers
 		        if(postedFile != null)
                         {
                                 string fileName = Path.GetFileName(postedFile.FileName);
-                                var uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
-                                var filePath = Path.Combine(uploads, fileName);
+                                string uploads = Path.Combine(hostingEnvironment.WebRootPath, "uploads");
+                                string filePath = Path.Combine(uploads, fileName);
+			        if (!Directory.Exists(uploads))
+				{
+					Directory.CreateDirectory(uploads);
+				}
                                 postedFile.CopyTo(new FileStream(filePath, FileMode.Create));
 
+				// Add in your code System.IO.File.OpenRead instead of File.OpenRead with MVC.
                                 using (FileStream fs = System.IO.File.OpenRead(filePath))
                                 {
                                         byte[] bs = new byte[fs.Length];
