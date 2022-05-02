@@ -24,6 +24,7 @@
             <td>First Name</td>
             <td>Last Name</td>
             <td>Photo</td>
+            <td>Face</td>
             <td>Edit</td>
             <td>Delete</td>
         </tr>
@@ -35,6 +36,17 @@
             @if(Model.Image != null)
             {
                 string base64String = Convert.ToBase64String(Model.Image);
+        	var imgsrc = string.Format("data:image/jpeg;base64,{0}", base64String);
+                <td> <img src="@imgsrc" alt="" style="width: 120px; height: 180px;"> </td>
+            }
+            else
+            {
+                <td> <img src="" alt="" style="width: 120px; height: 180px;"> </td>
+            }
+
+            @if(Model.Face != null)
+            {
+                string base64String = Convert.ToBase64String(Model.Face);
         	var imgsrc = string.Format("data:image/jpeg;base64,{0}", base64String);
                 <td> <img src="@imgsrc" alt="" style="width: 120px; height: 180px;"> </td>
             }
