@@ -22,6 +22,8 @@ My choice is "Redis™ Helm Chart" in this repo.
 export REDIS="192.168.33.223:6379"
 export REDIS_PASSWD=$(kubectl get secret --namespace default redis -o jsonpath="{.data.redis-password}" | base64 --decode)
 export REDIS_TTL="30"
+export RABBITMQ_IPADDR="192.168.33.220"
+export RABBITMQ_DLX="dlx.employee-queue-tmp"
 ```
 ```
 $ kubectl exec -it redis-master-0 -- redis-cli -a $REDIS_PASSWD
@@ -71,10 +73,10 @@ The following code sets 30 seconds as an expiration time while adding records.
 
 # 6. Build Container
 ```
-$ docker build . --file Dockerfile --tag employee2:2.0.0
+$ docker build . --file Dockerfile --tag employee2:2.0.6
 ```
 ```
-$ docker run --rm -it -p 5001:5001 -p 5000:5000 --env MONGO="172.17.0.2:27017" --env REDIS="192.168.33.223:6379" --env REDIS_PASSWD="XXXXXXXXXX" --env REDIS_TTL="10" --name employee employee2:2.0.0
+$ docker run --rm -it -p 5001:5001 -p 5000:5000 --env MONGO="172.17.0.2:27017" --env REDIS="192.168.33.223:6379" --env REDIS_PASSWD="XXXXXXXXXX" --env REDIS_TTL="10" --env RABBITMQ_IPADDR="192.168.33.220" --env RABBITMQ_DLX="dlx.employee-queue-tmp" --name employee employee2:2.0.6
 ```
 
 # 7. Push it to dockerhub
