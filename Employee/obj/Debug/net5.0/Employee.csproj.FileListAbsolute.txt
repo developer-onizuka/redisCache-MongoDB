@@ -270,3 +270,4 @@
 /home/vagrant/tests/redisCache-MongoDB/Employee/obj/Debug/net5.0/Employee.csproj.CopyComplete
 /home/vagrant/tests/redisCache-MongoDB/Employee/obj/Debug/net5.0/Employee.genruntimeconfig.cache
 /home/vagrant/tests/redisCache-MongoDB/Employee/obj/Debug/net5.0/ref/Employee.dll
+/home/vagrant/tests/redisCache-MongoDB/Employee/bin/Debug/net5.0/RabbitMQ.Client.dll

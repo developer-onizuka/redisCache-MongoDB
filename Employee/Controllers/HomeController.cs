@@ -15,6 +15,8 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
 using StackExchange.Redis;
 using Newtonsoft.Json;
+using RabbitMQ.Client;
+using System.Text;
 
 namespace Employee.Controllers
 {
@@ -155,6 +157,52 @@ namespace Employee.Controllers
                         }
 		}
 
+		public void UploadFileToMQ(IFormFile postedFile, EmployeeEntity emp)
+		{
+		        if(postedFile != null)
+                        {
+                                string fileName = Path.GetFileName(postedFile.FileName);
+                                string uploads = Path.Combine(hostingEnvironment.ContentRootPath, "wwwroot/uploads");
+                                string filePath = Path.Combine(uploads, fileName);
+			        if (!Directory.Exists(uploads))
+				{
+					Directory.CreateDirectory(uploads);
+				}
+                                postedFile.CopyTo(new FileStream(filePath, FileMode.Create));
+
+				// Add in your code System.IO.File.OpenRead instead of File.OpenRead with MVC.
+                                using (FileStream fs = System.IO.File.OpenRead(filePath))
+                                {
+                                        byte[] bs = new byte[fs.Length];
+                                        fs.Read(bs, 0, bs.Length);
+                                        emp.Image = bs;
+                                }
+
+        			var rabbitmq_ipaddr = Environment.GetEnvironmentVariable("RABBITMQ_IPADDR");
+        			var rabbitmq_dlx = Environment.GetEnvironmentVariable("RABBITMQ_DLX");
+        			//var rabbitmq_ipaddr = "192.168.33.220";
+        			//var rabbitmq_dlx = "dlx.employee-queue-tmp";
+
+				var factory = new ConnectionFactory() {
+					HostName = rabbitmq_ipaddr,
+					Port = 5672,
+					UserName = "user",
+					Password = "PASSWORD"
+				};
+
+				using(var connection = factory.CreateConnection())
+				using(var channel = connection.CreateModel())
+				{
+					string json = JsonConvert.SerializeObject(emp);
+					var body = Encoding.UTF8.GetBytes(json);
+					channel.BasicPublish(exchange: rabbitmq_dlx,
+							     routingKey: "",
+							     basicProperties: null,
+							     body: body);
+				}
+			}
+		}
+
 		public IActionResult Index()
 		{
 			int Size = (int)collection.CountDocuments(x=>true);
@@ -216,7 +264,8 @@ namespace Employee.Controllers
 		[HttpPost]
 		public IActionResult Insert(IFormFile postedFile, EmployeeEntity emp)
 		{
-			UploadFile(postedFile, emp);
+			//UploadFile(postedFile, emp);
+			UploadFileToMQ(postedFile, emp);
 			collection.InsertOne(emp);
 
 			TempData["Message"] = "Employee added successfully!";
