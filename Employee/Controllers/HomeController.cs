@@ -272,7 +272,7 @@ namespace Employee.Controllers
 
 			//WriteCache(emp);
 			//BurstWriteCacheSync(emp,cacheLine);
-			BurstWriteCacheAsync(emp,cacheLine);
+			//BurstWriteCacheAsync(emp,cacheLine);
 
 			return RedirectToAction("Index");
 		}
@@ -307,7 +307,7 @@ namespace Employee.Controllers
 
 			//WriteCache(emp);
 			//BurstWriteCacheSync(emp,cacheLine);
-			BurstWriteCacheAsync(emp,cacheLine);
+			//BurstWriteCacheAsync(emp,cacheLine);
 
 			return RedirectToAction("Index");
 		}
